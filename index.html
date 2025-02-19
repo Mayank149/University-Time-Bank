@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Time Bank (UTB)</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Welcome Panel -->
+        <div id="welcome-panel" class="panel">
+            <h2>Welcome to University Time Bank</h2>
+            <p>Exchange services and manage time credits efficiently.</p>
+            <button onclick="showPanel('login')">Login</button>
+            <button onclick="showPanel('register')">Register</button>
+        </div>
+
+        <!-- Login Panel -->
+        <div id="login-panel" class="panel hidden">
+            <h2>Login</h2>
+            <form id="login-form">
+                <label for="login-reg">University Reg No.:</label>
+                <input type="text" id="login-reg" required>
+                
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" required>
+                
+                <button type="submit">Login</button>
+                <button type="button" onclick="showPanel('welcome')">Back</button>
+            </form>
+        </div>
+
+        <!-- Register Panel -->
+        <div id="register-panel" class="panel hidden">
+            <h2>Register</h2>
+            <form id="register-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+
+                <label for="age">Age:</label>
+                <input type="number" id="age" required>
+
+                <label for="graduation-year">Year of Graduation:</label>
+                <input type="number" id="graduation-year" required>
+
+                <label for="stream">Stream:</label>
+                <input type="text" id="stream" required>
+
+                <label for="course">Course:</label>
+                <input type="text" id="course" required>
+
+                <label for="reg-no">University Reg No.:</label>
+                <input type="text" id="reg-no" required>
+
+                <label for="mobile">Mobile No.:</label>
+                <input type="text" id="mobile" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+
+                <button type="submit">Register</button>
+                <button type="button" onclick="showPanel('welcome')">Back</button>
+            </form>
+        </div>
+
+        <!-- Dashboard Panel -->
+        <div id="dashboard-panel" class="panel hidden">
+            <div class="sidebar">
+                <a href="#">Post Request</a>
+                <a href="#">Assignment Deadline</a>
+                <a href="#">Help & Support</a>
+                <a id = "logout" href="#" onclick="logout()">Logout</a>
+            </div>
+            
+            <div class="dashboard">
+                <div class="header">
+                    <span id="user-name">Welcome User</span>
+                    <span id="tc-balance">TCs: 5</span>
+                </div>
+            
+                <div class="card-container">
+                    <div class="card">Card 1</div>
+                    <div class="card">Card 2</div>
+                    <div class="card">Card 3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

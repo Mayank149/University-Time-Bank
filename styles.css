@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: url('images/background.webp') no-repeat center center fixed;
+    background-size: cover;
+    background-position: center top;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* === Center Container === */
+.container {
+    height: 80%;
+    width: 100%;
+    max-width: 800px;
+}
+
+/* === Glassmorphism Panel === */
+.panel {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Hide Panels Initially */
+.hidden {
+    display: none;
+}
+
+/* === Buttons === */
+button {
+    padding: 12px 25px;
+    margin: 12px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #28a745, #218838);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.08);
+    background: linear-gradient(135deg, #063a11, #094d19);
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.8);
+}
+
+/* === Input Fields === */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid rgba(44, 233, 70, 0.6);
+    background: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    font-size: 16px;
+}
+
+input:focus {
+    outline: none;
+    border: 2px solid #28a745;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* === Updated Dashboard Panel with Glassmorphism === */
+#dashboard-panel {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 900px;
+    min-height: 80vh;
+}
+
+/* === Sidebar with Glassmorphism === */
+.sidebar {
+    width: 220px;
+    min-height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 0;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    color: #00ff88;
+    transform: scale(1.1);
+}
+
+/* === Dashboard Content === */
+.dashboard {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* === Dashboard Header with Glassmorphism === */
+.header {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+#logout:hover{
+    color: red;
+}
+
+/* === Cards with Glassmorphism === */
+/* Card Styling */
+.card {
+    width: 250px;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Description Hidden by Default */
+.card .description {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.card:hover .description {
+    display: block;
+    opacity: 1;
+}
+
+/* TCs Display */
+.tc-offer {
+    font-size: 14px;
+    color: #ffcc00;
+    margin-top: 5px;
+}
+
+
+/* === Responsive Fixes === */
+@media (max-width: 768px) {
+    #dashboard-panel {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px 0;
+    }
+
+    .sidebar a {
+        font-size: 14px;
+        padding: 5px;
+    }
+
+    .dashboard {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .card {
+        width: 120px;
+        height: 120px;
+    }
+}
