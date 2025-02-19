@@ -45,6 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
             alert(`Welcome, ${user.name}!`);
             localStorage.setItem("loggedInUser", JSON.stringify(user));
             showDashboard(user);
+            location.reload();
+            updateDashboard();
         } else {
             alert("Invalid registration number or password.");
         }
@@ -52,8 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateDashboard() {
         const requestContainer = document.querySelector(".card-container");
-        requestContainer.innerHTML = ""; // Clear previous content
-
+        requestContainer.innerHTML = ""; // Clear old requests
+    
+        let requests = JSON.parse(localStorage.getItem("requests")) || []; // Fetch updated requests
+    
         requests.forEach(request => {
             const card = document.createElement("div");
             card.classList.add("card");
@@ -65,6 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
             requestContainer.appendChild(card);
         });
     }
+    
+    
 
     // Ensure requests persist when page reloads
     if (document.getElementById("dashboard-panel")) {
@@ -131,6 +137,7 @@ function showPanel(panel) {
     if (panel !== 'login') {
         document.getElementById('login-form').reset();
     }
+    
 
     setTimeout(() => {
         document.getElementById(`${panel}-panel`).classList.remove("hidden");
@@ -171,7 +178,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser) {
         showDashboard(loggedInUser);
+        updateDashboard();
     } else {
         showPanel("welcome");
     }
 });
+
+function hidepostform(){
+    document.getElementById('login-form').reset();
+    document.getElementById("post-request-form").classList.add("hidden"); 
+}
