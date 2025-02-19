@@ -16,6 +16,14 @@ body {
     align-items: center;
     height: 100vh;
 }
+/* Ensure the welcome panel is centered */
+#welcome-panel {
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
 /* === Center Container === */
 .container {
@@ -34,14 +42,55 @@ body {
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease-in-out;
 }
+.panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Style the form container */
+.form-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 15px; /* Space between pairs */
+    width: 100%;
+    max-width: 500px;
+}
+
+/* Ensure labels and inputs align properly */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+/* Adjust input width */
+input {
+    width: 100%;
+}
+
 
 /* Hide Panels Initially */
 .hidden {
-    display: none;
+    display: none !important;
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
 }
 
 /* === Buttons === */
-button {
+button {    
     padding: 12px 25px;
     margin: 12px;
     border: none;
@@ -52,6 +101,13 @@ button {
     color: #fff;
     background: linear-gradient(135deg, #28a745, #218838);
     transition: all 0.3s ease;
+}
+button {
+    display: inline-block;
+    width: 80%;
+    max-width: 300px;
+    padding: 12px;
+    text-align: center;
 }
 
 button:hover {
@@ -83,32 +139,27 @@ input::placeholder {
 
 /* === Updated Dashboard Panel with Glassmorphism === */
 #dashboard-panel {
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    max-width: 100%;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    color: #fff;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    width: 90%;
-    max-width: 900px;
-    min-height: 80vh;
+    justify-content: space-between;
 }
 
 /* === Sidebar with Glassmorphism === */
 .sidebar {
-    width: 220px;
-    min-height: 100%;
+    width: 250px; /* Make sidebar a little wider */
+    height: 100vh;
     background: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(15px);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar a {
@@ -128,10 +179,11 @@ input::placeholder {
 /* === Dashboard Content === */
 .dashboard {
     flex-grow: 1;
-    padding: 20px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    overflow-y: auto; /* Allow scrolling if content overflows */
 }
 
 /* === Dashboard Header with Glassmorphism === */
@@ -139,14 +191,14 @@ input::placeholder {
     width: 100%;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    padding: 15px 20px;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: white;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
-    border-radius: 10px;
+    border-radius: 0; /* Remove rounded edges */
     margin-bottom: 20px;
     box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
 }
@@ -157,28 +209,35 @@ input::placeholder {
 /* === Cards with Glassmorphism === */
 /* Card Styling */
 .card {
-    width: 250px;
-    height: 180px;
+    width: 300px;
+    height: 220px;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(20px);
     border-radius: 15px;
-    padding: 15px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
-    position: relative;
-    transition: all 0.3s ease-in-out;
     text-align: center;
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
 }
 
 .card:hover {
     transform: scale(1.1);
     background: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.1);
 }
 
 /* Description Hidden by Default */
@@ -190,7 +249,7 @@ input::placeholder {
     width: 80%;
     transform: translate(-50%, -50%);
     font-size: 14px;
-    color: #fff;
+    color: black;
     text-align: center;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
@@ -209,26 +268,19 @@ input::placeholder {
 }
 
 
-/* === Responsive Fixes === */
+/* === Make Sidebar Responsive for Mobile === */
 @media (max-width: 768px) {
     #dashboard-panel {
         flex-direction: column;
         align-items: center;
-        text-align: center;
     }
 
     .sidebar {
         width: 100%;
-        min-height: auto;
-        display: flex;
+        height: auto;
         flex-direction: row;
         justify-content: space-around;
-        padding: 10px 0;
-    }
-
-    .sidebar a {
-        font-size: 14px;
-        padding: 5px;
+        padding: 10px;
     }
 
     .dashboard {
@@ -237,7 +289,8 @@ input::placeholder {
     }
 
     .card {
-        width: 120px;
-        height: 120px;
+        width: 100%;
+        height: auto;
+        padding: 15px;
     }
 }

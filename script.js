@@ -3,18 +3,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let requests = JSON.parse(localStorage.getItem("requests")) || [];
 
     // Registration Form Submit
-    document.getElementById("register-form").addEventListener("submit", function (event) {
+    document.getElementById("register-form").addEventListener("submit", async function (event) {
         event.preventDefault();
+
+        const password = document.getElementById("password").value;
+        const hashedPassword = await hashPassword(password); // Hash password before storing
 
         const userData = {
             name: document.getElementById("name").value,
             age: document.getElementById("age").value,
             gradYear: document.getElementById("graduation-year").value,
-            stream: document.getElementById("stream").value,
-            course: document.getElementById("course").value,
             regNo: document.getElementById("reg-no").value,
             mobile: document.getElementById("mobile").value,
-            password: document.getElementById("password").value,
+            password: hashedPassword, // Store hashed password
             tc: 5 // Start with 5 TCs
         };
 
@@ -31,17 +32,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Login Form Submit
-    document.getElementById("login-form").addEventListener("submit", function (event) {
+    document.getElementById("login-form").addEventListener("submit", async function (event) {
         event.preventDefault();
 
         const regNo = document.getElementById("login-reg").value;
         const password = document.getElementById("login-password").value;
+        const hashedPassword = await hashPassword(password); // Hash entered password
 
-        const user = users.find(user => user.regNo === regNo && user.password === password);
+        const user = users.find(user => user.regNo === regNo && user.password === hashedPassword);
 
         if (user) {
             alert(`Welcome, ${user.name}!`);
-            localStorage.setItem("loggedInUser", JSON.stringify(user)); 
+            localStorage.setItem("loggedInUser", JSON.stringify(user));
             showDashboard(user);
         } else {
             alert("Invalid registration number or password.");
@@ -50,7 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateDashboard() {
         const requestContainer = document.querySelector(".card-container");
-        requestContainer.innerHTML = ""; // Clear previous requests
+        requestContainer.innerHTML = ""; // Clear previous content
+
         requests.forEach(request => {
             const card = document.createElement("div");
             card.classList.add("card");
@@ -63,17 +66,26 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Post Request Functionality
+    // Ensure requests persist when page reloads
+    if (document.getElementById("dashboard-panel")) {
+        updateDashboard();
+    }
+
+
+    // Post Request Functionality (Using a Form Instead of Prompts)
     document.getElementById("post-request-btn").addEventListener("click", () => {
-        const title = prompt("Enter Request Title:");
-        if (!title) return;
+        document.getElementById("post-request-form").classList.remove("hidden");
+    });
 
-        const description = prompt("Enter Request Description:");
-        if (!description) return;
+    document.getElementById("post-request-form").addEventListener("submit", function (event) {
+        event.preventDefault();
 
-        const tcOffered = parseInt(prompt("Enter TCs Offered:"), 10);
-        if (isNaN(tcOffered) || tcOffered <= 0) {
-            alert("Invalid TC amount.");
+        const title = document.getElementById("request-title").value;
+        const description = document.getElementById("request-description").value;
+        const tcOffered = parseInt(document.getElementById("request-tc").value, 10);
+
+        if (!title || !description || isNaN(tcOffered) || tcOffered <= 0) {
+            alert("Please fill in all fields correctly.");
             return;
         }
 
@@ -94,11 +106,13 @@ document.addEventListener("DOMContentLoaded", () => {
         users = users.map(user => user.regNo === loggedInUser.regNo ? loggedInUser : user);
         localStorage.setItem("users", JSON.stringify(users));
 
-        requests.push({ title, description, tcOffered });
+        requests.push({ title, description, tcOffered, owner: loggedInUser.regNo });
         localStorage.setItem("requests", JSON.stringify(requests));
 
         updateDashboard();
+        document.getElementById("tc-balance").textContent = `TCs: ${loggedInUser.tc}`;
         alert("Request posted successfully!");
+        document.getElementById("post-request-form").classList.add("hidden"); // Hide form after posting
     });
 
 });
@@ -109,6 +123,14 @@ function showPanel(panel) {
         p.style.opacity = "0";
         setTimeout(() => p.classList.add("hidden"), 300);
     });
+
+    // Clear form inputs when switching away
+    if (panel !== 'register') {
+        document.getElementById('register-form').reset();
+    }
+    if (panel !== 'login') {
+        document.getElementById('login-form').reset();
+    }
 
     setTimeout(() => {
         document.getElementById(`${panel}-panel`).classList.remove("hidden");
@@ -125,16 +147,25 @@ function showDashboard(user) {
     if (loggedInUser) {
         document.getElementById("user-name").textContent = `Welcome, ${loggedInUser.name}`;
         document.getElementById("tc-balance").textContent = `TCs: ${loggedInUser.tc}`;
-    };
-    
+    }
+    updateDashboard(); // Reload stored requests when logging in
 }
 
 // Logout
 function logout() {
     localStorage.removeItem("loggedInUser");
+    document.querySelector(".card-container").innerHTML = ""; // Clear requests
     showPanel("welcome");
 }
 
+// Password Hashing Function
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
