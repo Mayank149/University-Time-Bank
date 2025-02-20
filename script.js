@@ -68,36 +68,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span class="tc-offer">TCs: ${request.tcOffered}</span>
             `;
     
-            // Show Delete button if the logged-in user is the request creator
-            if (loggedInUser.regNo === request.owner) {
-                const deleteBtn = document.createElement("button");
-                deleteBtn.textContent = "Delete";
-                deleteBtn.classList.add("delete-btn");
-                deleteBtn.onclick = () => deleteRequest(index);
-                card.appendChild(deleteBtn);
-            }
-    
-            // Show Accept button if the logged-in user is NOT the request creator and no one has accepted it
-            if (loggedInUser.regNo !== request.owner && !request.acceptedBy) {
-                const acceptBtn = document.createElement("button");
-                acceptBtn.textContent = "Accept";
-                acceptBtn.classList.add("accept-btn");
-                acceptBtn.onclick = () => acceptRequest(index);
-                card.appendChild(acceptBtn);
-            }
-    
-            // Show "Mark as Complete" button if the request has been accepted and the logged-in user is the creator
-            if (loggedInUser.regNo === request.owner && request.acceptedBy) {
-                const completeBtn = document.createElement("button");
-                completeBtn.textContent = "Mark as Complete";
-                completeBtn.classList.add("complete-btn");
-                completeBtn.onclick = () => completeRequest(index);
-                card.appendChild(completeBtn);
-            }
+            // Click event to expand the card
+            card.addEventListener("click", () => expandCard(card, request, index));
     
             requestContainer.appendChild(card);
         });
     }
+    
     
     
     
@@ -149,6 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("tc-balance").textContent = `TCs: ${loggedInUser.tc}`;
         alert("Request posted successfully!");
         document.getElementById("post-request-form").classList.add("hidden"); // Hide form after posting
+        document.getElementById("post-request-form").reset();
     });
 
 });
@@ -223,6 +201,11 @@ function completeRequest(index) {
         if (acceptingUser && requestOwner) {
             // Transfer TCs
             acceptingUser.tc += request.tcOffered;
+            // Update users array to reflect new TC balance
+            users = users.map(user => 
+                user.regNo === acceptingUser.regNo ? acceptingUser : 
+                user.regNo === requestOwner.regNo ? requestOwner : user
+            );
 
             // Remove request after completion
             requests.splice(index, 1);
@@ -238,12 +221,97 @@ function completeRequest(index) {
     }
 }
 
+// Function to expand the card on click
+function expandCard(card, request, index) {
+    let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!loggedInUser) {
+        alert("Please log in first.");
+        return;
+    }
+
+    // Remove existing expanded card
+    let existingExpanded = document.querySelector(".card.expanded");
+    if (existingExpanded) existingExpanded.remove();
+
+    // Clone and modify card for expansion
+    let expandedCard = card.cloneNode(true);
+    expandedCard.classList.add("expanded");
+
+    // Ensure full description visibility with text wrapping
+    let description = expandedCard.querySelector(".description");
+    description.style.display = "block";
+    description.style.whiteSpace = "normal"; // Allow text wrapping
+
+    // Create button container
+    let buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("button-container");
+
+    // Add buttons based on user role
+    if (loggedInUser.regNo === request.owner) {
+        let deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.classList.add("delete-btn");
+        deleteBtn.onclick = () => deleteRequest(index); // ✅ Pass index instead of request
+        buttonContainer.appendChild(deleteBtn);
+    }
+    if (loggedInUser.regNo !== request.owner && !request.acceptedBy) {
+        let acceptBtn = document.createElement("button");
+        acceptBtn.textContent = "Accept";
+        acceptBtn.classList.add("accept-btn");
+        acceptBtn.onclick = () => acceptRequest(index); // ✅ Pass index
+        buttonContainer.appendChild(acceptBtn);
+    }
+    if (loggedInUser.regNo === request.owner && request.acceptedBy) {
+        let completeBtn = document.createElement("button");
+        completeBtn.textContent = "Mark as Complete";
+        completeBtn.classList.add("complete-btn");
+        completeBtn.onclick = () => completeRequest(index); // ✅ Pass index
+        buttonContainer.appendChild(completeBtn);
+    }
+
+    // Add close button
+    let closeBtn = document.createElement("button");
+    closeBtn.textContent = "Close";
+    closeBtn.onclick = closeExpandedCard;
+    buttonContainer.appendChild(closeBtn);
+
+    // Append buttons below content
+    expandedCard.appendChild(buttonContainer);
+
+    // Add a dim background effect
+    let dimBackground = document.createElement("div");
+    dimBackground.classList.add("dim-background");
+    document.body.appendChild(dimBackground);
+    dimBackground.style.display = "block";
+
+    document.body.appendChild(expandedCard);
+
+    // Close event on dim background
+    dimBackground.addEventListener("click", closeExpandedCard);
+}
+
+
+
+
+// Function to close the expanded card
+function closeExpandedCard() {
+    let expandedCard = document.querySelector(".card.expanded");
+    let dimBackground = document.querySelector(".dim-background");
+
+    if (expandedCard) expandedCard.remove();
+    if (dimBackground) {
+        dimBackground.style.display = "none";
+        dimBackground.remove();
+    }
+}
+
+
 
 // Logout
 function logout() {
     localStorage.removeItem("loggedInUser");
-    document.querySelector(".card-container").innerHTML = ""; // Clear requests
     showPanel("welcome");
+    location.reload(); // Ensures dashboard is cleared properly
 }
 
 // Password Hashing Function
