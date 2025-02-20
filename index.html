@@ -91,18 +91,26 @@
                 </div>
             </div>
 
-            <form id="post-request-form" class="hidden">
+            
+        </div>
+        
+        <div id="post-request-popup" class="popup hidden">
+            <form id="post-request-form">
                 <h2>Post a Request</h2>
-                <input type="text" id="request-title" placeholder="Request Title" required>
-                <textarea id="request-description" placeholder="Request Description" required></textarea>
-                <input type="number" id="request-tc" placeholder="TCs Offered" required>
-                <div class="button-container">
-                    <button type="submit">Post Request</button>
-                    <button type="button" onclick="hidepostform()">Back</button>
-                </div>
+                <label for="request-title">Title:</label>
+                <input type="text" id="request-title" required>
+        
+                <label for="request-description">Description:</label>
+                <textarea id="request-description" required></textarea>
+        
+                <label for="request-tc">TCs Offered:</label>
+                <input type="number" id="request-tc" min="1" required>
+        
+                <button type="submit">Post</button>
+                <button type="button" id="close-request-btn">Close</button>
             </form>
         </div>
-
+        
     </div>
 
     <script src="script.js"></script>

@@ -85,14 +85,34 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // Post Request Functionality (Using a Form Instead of Prompts)
-    document.getElementById("post-request-btn").addEventListener("click", () => {
-        document.getElementById("post-request-form").classList.remove("hidden");
-    });
+    const postRequestPopup = document.getElementById("post-request-popup");
+    const dimBackground = document.getElementById("dim-background");
+    const postRequestForm = document.getElementById("post-request-form");
+    const postRequestBtn = document.getElementById("post-request-btn");
+    const closeRequestBtn = document.getElementById("close-request-btn");
 
-    document.getElementById("post-request-form").addEventListener("submit", function (event) {
+    if (postRequestBtn) {
+        postRequestBtn.addEventListener("click", () => {
+            postRequestPopup.classList.remove("hidden");
+            dimBackground.classList.remove("hidden");
+        });
+    }
+
+    if (closeRequestBtn) {
+        closeRequestBtn.addEventListener("click", closePostForm);
+    }
+
+    if (dimBackground) {
+        dimBackground.addEventListener("click", closePostForm);
+    }
+
+    function closePostForm() {
+        postRequestPopup.classList.add("hidden");
+        dimBackground.classList.add("hidden");
+    }
+
+    postRequestForm.addEventListener("submit", function (event) {
         event.preventDefault();
-
         const title = document.getElementById("request-title").value;
         const description = document.getElementById("request-description").value;
         const tcOffered = parseInt(document.getElementById("request-tc").value, 10);
@@ -113,20 +133,23 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Deduct TCs and save request
         loggedInUser.tc -= tcOffered;
         localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+        let users = JSON.parse(localStorage.getItem("users")) || [];
         users = users.map(user => user.regNo === loggedInUser.regNo ? loggedInUser : user);
         localStorage.setItem("users", JSON.stringify(users));
 
+        let requests = JSON.parse(localStorage.getItem("requests")) || [];
         requests.push({ title, description, tcOffered, owner: loggedInUser.regNo });
         localStorage.setItem("requests", JSON.stringify(requests));
 
         updateDashboard();
         document.getElementById("tc-balance").textContent = `TCs: ${loggedInUser.tc}`;
         alert("Request posted successfully!");
-        document.getElementById("post-request-form").classList.add("hidden"); // Hide form after posting
-        document.getElementById("post-request-form").reset();
+
+        closePostForm();
+        postRequestForm.reset();
     });
 
 });
