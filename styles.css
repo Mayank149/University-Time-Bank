@@ -15,6 +15,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow-y: hidden;
 }
 /* Ensure the welcome panel is centered */
 #welcome-panel {
@@ -142,6 +143,9 @@ input::placeholder {
     width: 100vw;
     height: 100vh;
     min-height: 100vh;
+    background: linear-gradient(135deg, rgba(10, 25, 47, 0.5), rgba(0, 0, 0, 0.6));
+    backdrop-filter: blur(15px);
+    border-radius: 0;
     max-width: 100%;
     display: flex;
     flex-direction: row;
@@ -153,7 +157,7 @@ input::placeholder {
 .sidebar {
     width: 250px; /* Make sidebar a little wider */
     height: 100vh;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.297);
     backdrop-filter: blur(15px);
     display: flex;
     flex-direction: column;
@@ -175,6 +179,15 @@ input::placeholder {
     color: #00ff88;
     transform: scale(1.1);
 }
+#post-request-btn {
+    background: rgba(255, 255, 255, 0.2); /* Transparent button */
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: 0.3s;
+}
+#post-request-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
 
 /* === Dashboard Content === */
 .dashboard {
@@ -184,6 +197,12 @@ input::placeholder {
     flex-direction: column;
     justify-content: flex-start;
     overflow-y: auto; /* Allow scrolling if content overflows */
+}
+#request-description {
+    width: 100%;
+    height: 150px; /* Adjust height as needed */
+    resize: vertical; /* Allows users to resize if needed */
+    font-size: 16px;
 }
 
 /* === Dashboard Header with Glassmorphism === */
@@ -211,8 +230,9 @@ input::placeholder {
 .card {
     width: 300px;
     height: 220px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.2); /* Lighter for contrast */
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     padding: 20px;
     display: flex;
@@ -266,7 +286,6 @@ input::placeholder {
     color: #ffcc00;
     margin-top: 5px;
 }
-
 
 /* === Make Sidebar Responsive for Mobile === */
 @media (max-width: 768px) {
