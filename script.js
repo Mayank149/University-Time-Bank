@@ -44,8 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (user) {
             alert(`Welcome, ${user.name}!`);
             localStorage.setItem("loggedInUser", JSON.stringify(user));
+            reloadpage();
             showDashboard(user);
-            location.reload();
             updateDashboard();
         } else {
             alert("Invalid registration number or password.");
@@ -187,4 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function hidepostform(){
     document.getElementById('login-form').reset();
     document.getElementById("post-request-form").classList.add("hidden"); 
+}
+function reloadpage(){
+    location.reload();
 }
