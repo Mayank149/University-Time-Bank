@@ -56,9 +56,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const requestContainer = document.querySelector(".card-container");
         requestContainer.innerHTML = ""; // Clear old requests
     
-        let requests = JSON.parse(localStorage.getItem("requests")) || []; // Fetch updated requests
+        let requests = JSON.parse(localStorage.getItem("requests")) || [];
+        let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     
-        requests.forEach(request => {
+        requests.forEach((request, index) => {
             const card = document.createElement("div");
             card.classList.add("card");
             card.innerHTML = `
@@ -66,9 +67,38 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p class="description">${request.description}</p>
                 <span class="tc-offer">TCs: ${request.tcOffered}</span>
             `;
+    
+            // Show Delete button if the logged-in user is the request creator
+            if (loggedInUser.regNo === request.owner) {
+                const deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "Delete";
+                deleteBtn.classList.add("delete-btn");
+                deleteBtn.onclick = () => deleteRequest(index);
+                card.appendChild(deleteBtn);
+            }
+    
+            // Show Accept button if the logged-in user is NOT the request creator and no one has accepted it
+            if (loggedInUser.regNo !== request.owner && !request.acceptedBy) {
+                const acceptBtn = document.createElement("button");
+                acceptBtn.textContent = "Accept";
+                acceptBtn.classList.add("accept-btn");
+                acceptBtn.onclick = () => acceptRequest(index);
+                card.appendChild(acceptBtn);
+            }
+    
+            // Show "Mark as Complete" button if the request has been accepted and the logged-in user is the creator
+            if (loggedInUser.regNo === request.owner && request.acceptedBy) {
+                const completeBtn = document.createElement("button");
+                completeBtn.textContent = "Mark as Complete";
+                completeBtn.classList.add("complete-btn");
+                completeBtn.onclick = () => completeRequest(index);
+                card.appendChild(completeBtn);
+            }
+    
             requestContainer.appendChild(card);
         });
     }
+    
     
     
 
@@ -157,6 +187,57 @@ function showDashboard(user) {
     }
     updateDashboard(); // Reload stored requests when logging in
 }
+
+function deleteRequest(index) {
+    if (confirm("Are you sure you want to delete this request?")) {
+        let requests = JSON.parse(localStorage.getItem("requests")) || [];
+        requests.splice(index, 1); // Remove request
+        localStorage.setItem("requests", JSON.stringify(requests));
+        reloadpage();
+        updateDashboard();
+    }
+}
+
+function acceptRequest(index) {
+    if (confirm("Do you want to accept this request? You won't be able to undo this action.")) {
+        let requests = JSON.parse(localStorage.getItem("requests")) || [];
+        let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+        requests[index].acceptedBy = loggedInUser.regNo; // Store the accepting user
+        localStorage.setItem("requests", JSON.stringify(requests));
+        reloadpage();
+        updateDashboard();
+    }
+}
+
+function completeRequest(index) {
+    if (confirm("Are you sure this request is complete? The TCs will be transferred.")) {
+        let requests = JSON.parse(localStorage.getItem("requests")) || [];
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        let loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+        let request = requests[index];
+        let acceptingUser = users.find(user => user.regNo === request.acceptedBy);
+        let requestOwner = users.find(user => user.regNo === request.owner);
+
+        if (acceptingUser && requestOwner) {
+            // Transfer TCs
+            acceptingUser.tc += request.tcOffered;
+
+            // Remove request after completion
+            requests.splice(index, 1);
+
+            // Update local storage
+            localStorage.setItem("users", JSON.stringify(users));
+            localStorage.setItem("requests", JSON.stringify(requests));
+            localStorage.setItem("loggedInUser", JSON.stringify(requestOwner)); // Update the owner’s TC balance
+            reloadpage();
+            updateDashboard();
+            alert(`Request completed! ${request.tcOffered} TCs have been transferred to ${acceptingUser.name}.`);
+        }
+    }
+}
+
 
 // Logout
 function logout() {
