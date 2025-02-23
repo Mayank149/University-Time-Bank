@@ -363,3 +363,51 @@ function hidepostform(){
 function reloadpage(){
     location.reload();
 }
+
+document.getElementById("open-assignment-btn").addEventListener("click", function () {
+    document.getElementById("assignment-deadline-popup").classList.remove("hidden");
+});
+
+document.getElementById("close-assignment-btn").addEventListener("click", function () {
+    document.getElementById("assignment-deadline-popup").classList.add("hidden");
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const helpSupportForm = document.getElementById("help-support-form");
+
+    if (helpSupportForm) {
+        helpSupportForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            let queryType = document.getElementById("query-type").value;
+            let queryMessage = document.getElementById("query-message").value.trim();
+
+            if (!queryMessage) {
+                alert("Please enter a message.");
+                return;
+            }
+
+            let userEmail = "your-email@gmail.com"; // Replace with your actual email
+            let mailtoLink = `mailto:${userEmail}?subject=${encodeURIComponent(queryType)}&body=${encodeURIComponent(queryMessage)}`;
+
+            let emailOpened = window.open(mailtoLink, "_blank");
+
+            if (!emailOpened) {
+                alert("Could not open email client. Please send an email manually.");
+            }
+
+            // Close the popup and reset the form
+            document.getElementById("help-support-popup").classList.add("hidden");
+            helpSupportForm.reset();
+        });
+    }
+
+    // Help & Support Popup Controls
+    document.getElementById("open-help-support").addEventListener("click", () => {
+        document.getElementById("help-support-popup").classList.remove("hidden");
+    });
+
+    document.getElementById("close-help-support").addEventListener("click", () => {
+        document.getElementById("help-support-popup").classList.add("hidden");
+    });
+});

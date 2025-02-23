@@ -179,15 +179,92 @@ input::placeholder {
     color: #00ff88;
     transform: scale(1.1);
 }
-#post-request-btn {
+.sidebar button {
     background: rgba(255, 255, 255, 0.2); /* Transparent button */
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.4);
     transition: 0.3s;
 }
-#post-request-btn:hover {
+.sidebar button:hover {
     background: rgba(255, 255, 255, 0.4);
 }
+
+
+/* Assignment Deadline Popup */
+#assignment-deadline-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 20px;
+    width: 40%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    z-index: 1000;
+    text-align: center;
+}
+
+/* Help & Support Popup */
+#help-support-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 12px;
+    padding: 20px;
+    width: 40%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+#help-support-popup h2 {
+    color: white;
+    text-align: center;
+}
+
+#help-support-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#help-support-form select,
+#help-support-form textarea {
+    padding: 10px;
+    background-color: #282c34; /* Dark background */
+    color: white; /* White text */
+    border: 1px solid #ccc; /* Optional: Border color */
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+#help-support-form textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+#help-support-popup button {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#help-support-popup button:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
 
 /* === Dashboard Content === */
 .dashboard {

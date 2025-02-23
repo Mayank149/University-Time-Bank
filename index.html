@@ -73,8 +73,8 @@
         <div id="dashboard-panel" class="panel hidden">
             <div class="sidebar">
                 <button id="post-request-btn">Post Request</button>
-                <a href="#">Assignment Deadline</a>
-                <a href="#">Help & Support</a>
+                <button id="open-assignment-btn">Deadlines Extension</button>
+                <button id="open-help-support">Help & Support</button>
                 <a id = "logout" href="#" onclick="logout()">Logout</a>
             </div>
             
@@ -110,6 +110,38 @@
                 <button type="button" id="close-request-btn">Close</button>
             </form>
         </div>
+
+        <!-- Assignment Deadline Popup -->
+        <div id="assignment-deadline-popup" class="popup hidden">
+            <h2>Assignment Deadlines</h2>
+            <p>To be added in future</p>
+            <button id="close-assignment-btn">Close</button>
+        </div>
+
+        <!-- Help & Support Popup -->
+        <div id="help-support-popup" class="popup hidden">
+            <h2>Help & Support</h2>
+            <p>Facing an issue? Let us know!</p>
+            
+            <form id="help-support-form">
+                <label for="query-type">Query Type:</label>
+                <select id="query-type">
+                    <option value="report">Report an Issue</option>
+                    <option value="fraud">Fraud Alert</option>
+                    <option value="help">General Help</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <label for="query-message">Your Message:</label>
+                <textarea id="query-message" placeholder="Describe your issue..." required></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+            
+            <button id="close-help-support">Close</button>
+        </div>
+
+        
         
     </div>
 
